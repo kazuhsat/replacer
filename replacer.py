@@ -4,36 +4,11 @@
 # Author: kazuhsat <kazuhsat555@gmail.com>
 
 import shutil
+import argparse
+import os.path
+import glob
 
-def file_str_replace(pathname: str, search: str, replace: str, interactive: bool=True) -> bool:
-    """file_str_replace(pathname: string, search: string, replace: string, interactive: boolean)
-
-    replace words in a file.
-    """
-    tmp_pathname = pathname + '.replace'
-
-    with open(pathname, 'r') as search_file, open(tmp_pathname, 'a') as replace_file:
-        for line in search_file:
-            if search in line:
-                if interactive:
-                    print('>>> %s' % pathname)
-                    print(line, end='')
-                    if input("replace with %s ? [y/n] " % search).lower() != 'y':
-                        replace_file.write(line)
-                        continue;
-                replace_file.write(line.replace(search, replace))
-            else:
-                replace_file.write(line)
-
-    shutil.move(tmp_pathname, pathname)
-
-    return True
-
-if __name__ == "__main__":
-    import argparse
-    import os.path
-    import glob
-
+def main():
     parser = argparse.ArgumentParser(prog='replacer', epilog='(END)', add_help=True)
 
     parser.add_argument('argument', nargs=3)
@@ -63,3 +38,31 @@ if __name__ == "__main__":
                     file_str_replace(tmp_pathname, search, replace, interactive)
     else:
         file_str_replace(pathname, search, replace, interactive)
+
+
+def file_str_replace(pathname: str, search: str, replace: str, interactive: bool=True) -> bool:
+    """file_str_replace(pathname: string, search: string, replace: string, interactive: boolean)
+
+    replace words in a file.
+    """
+    tmp_pathname = pathname + '.replace'
+
+    with open(pathname, 'r') as search_file, open(tmp_pathname, 'a') as replace_file:
+        for line in search_file:
+            if search in line:
+                if interactive:
+                    print('>>> %s' % pathname)
+                    print(line, end='')
+                    if input("replace with %s ? [y/n] " % search).lower() != 'y':
+                        replace_file.write(line)
+                        continue;
+                replace_file.write(line.replace(search, replace))
+            else:
+                replace_file.write(line)
+
+    shutil.move(tmp_pathname, pathname)
+
+    return True
+
+if __name__ == "__main__":
+    main()
